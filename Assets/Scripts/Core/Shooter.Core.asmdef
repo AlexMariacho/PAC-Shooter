@@ -1,9 +1,7 @@
 {
     "name": "Shooter.Core",
     "rootNamespace": "",
-    "references": [
-        "GUID:4a1660ee30ef7e44982e660ae03e069b"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
