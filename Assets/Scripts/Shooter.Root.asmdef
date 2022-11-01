@@ -1,0 +1,17 @@
+{
+    "name": "Shooter.Root",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ec18b5a8343e4764a848e6b64512817b",
+        "GUID:4a1660ee30ef7e44982e660ae03e069b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

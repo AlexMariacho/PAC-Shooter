@@ -1,0 +1,16 @@
+{
+    "name": "Shooter.Core",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4a1660ee30ef7e44982e660ae03e069b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
