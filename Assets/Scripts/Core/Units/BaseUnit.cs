@@ -1,9 +1,14 @@
+using System;
+using Core.Views;
+
 namespace Shooter.Core
 {
+    [Serializable]
     public class BaseUnit
     {
-        public IDestroyable Destroyable;
-        public IMove MoveComponent;
-        public IWeapon Weapon;
+        public IDestroyable Destroyable { get; protected set; }
+        public UnitView View;
     }
+
+
 }
