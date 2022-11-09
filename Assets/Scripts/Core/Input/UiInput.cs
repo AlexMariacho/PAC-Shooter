@@ -34,7 +34,10 @@ namespace Core.Input
                     return;
                 }
 
-                Move?.Invoke(_camera.ScreenToWorldPoint(_input.Player.MousePosition.ReadValue<Vector2>()));
+                if (hit.collider != null)
+                {
+                    Move?.Invoke(hit.point);
+                }
             }
         }
 

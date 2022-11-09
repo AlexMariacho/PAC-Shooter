@@ -37,7 +37,7 @@ namespace Shooter.Core
             }
             
             _selfView.transform.Rotate(target.View.transform.position - _selfView.transform.position);
-            _selfView.Animator.SetBool(AnimatorConstantNames.Attack, true);
+            _selfView.Animator.SetTrigger(AnimatorConstantNames.Attack);
         }
 
         private void OnTakeDamage()

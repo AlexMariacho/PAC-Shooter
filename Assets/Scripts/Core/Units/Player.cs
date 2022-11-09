@@ -12,53 +12,45 @@ namespace Shooter.Core
         public IWeapon Weapon;
         public IUnitInput Input;
 
-        private UnitState _currentState;
-        private BaseUnit _target;
-        private float _distance;
-
+        private StateMachine _stateMachine;
+        private MoveInformation _moveInformation;
+        private TargetInformation _targetInformation;
+        
         public Player(IUnitInput input, UnitView view, PlayerConfiguration configuration)
         {
             View = view;
             
-            //Weapon = new RifleWeapon();
+            Weapon = new RifleWeapon(view, configuration.FireRate, configuration.Distance, configuration.Damage);
             Destroyable = new PlayerDestroyable();
             MoveComponent = new PlayerNavigation(configuration.MoveSpeed, configuration.AngularSpeed, view.transform, view.NavAgent);
             Input = input;
             
             Input.Attack += OnAttack;
             Input.Move += OnMove;
+
+            _moveInformation = new MoveInformation();
+            _targetInformation = new TargetInformation();
+            _stateMachine = new StateMachine(this, _moveInformation, _targetInformation, configuration);
+            _stateMachine.Enable();
         }
 
         private void OnAttack(UnitView obj)
         {
-            SetState(Vector3.Distance(View.transform.position, View.transform.position) > _distance
-                ? UnitState.MoveToAttack
-                : UnitState.Attack);
-        }
-
-        private void OnMove(Vector3 obj)
-        {
-            SetState(UnitState.Move);
-        }
-
-        private void SetState(UnitState state)
-        {
             
         }
 
+        private void OnMove(Vector3 targetPosition)
+        {
+            _moveInformation.TargetPoint = targetPosition;
+        }
+        
         public void Dispose()
         {
+            _stateMachine.Disable();
             Input.Attack -= OnAttack;
             Input.Move -= OnMove;
         }
+
     }
 
-    public enum UnitState
-    {
-        Idle,
-        Move,
-        MoveToAttack,
-        Attack,
-        Death
-    }
 }
