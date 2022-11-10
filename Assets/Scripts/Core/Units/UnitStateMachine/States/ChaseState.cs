@@ -18,7 +18,6 @@ namespace Shooter.Core
 
         public override void UpdateState()
         {
-            base.UpdateState();
             _mover.Move(_moveInformation.TargetPoint);
         }
 

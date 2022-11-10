@@ -18,7 +18,6 @@ namespace Shooter.Core
         public override void UpdateState()
         {
             _weapon.Fire(_targetInformation.Target);
-            base.UpdateState();
         }
 
         public override void EnterState()

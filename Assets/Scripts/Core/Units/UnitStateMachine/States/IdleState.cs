@@ -16,5 +16,10 @@ namespace Shooter.Core
         public override void ExitState()
         {
         }
+
+        public override void UpdateState()
+        {
+            
+        }
     }
 }

@@ -5,10 +5,10 @@ namespace Shooter.Core
     [Serializable]
     public class TransitionInformation
     {
-        public ITransition Condition;
+        public Func<bool> Condition;
         public BaseState NextState;
 
-        public TransitionInformation(ITransition condition, BaseState nextState)
+        public TransitionInformation(Func<bool> condition, BaseState nextState)
         {
             Condition = condition;
             NextState = nextState;

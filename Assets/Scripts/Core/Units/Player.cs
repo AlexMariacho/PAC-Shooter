@@ -1,56 +1,46 @@
 using System;
+using System.Runtime.InteropServices;
+using Core;
 using Core.Configurations;
 using Core.Input;
 using Core.Views;
-using UnityEngine;
+using Zenject;
 
 namespace Shooter.Core
 {
-    public class Player : BaseUnit, IDisposable
+    public class Player : BaseUnit, IInitializable, IDisposable
     {
         public IMove MoveComponent;
         public IWeapon Weapon;
         public IUnitInput Input;
 
-        private StateMachine _stateMachine;
-        private MoveInformation _moveInformation;
-        private TargetInformation _targetInformation;
-        
-        public Player(IUnitInput input, UnitView view, PlayerConfiguration configuration)
+        private WorldContainer _worldContainer;
+        private PlayerStateMachine _playerStateMachine;
+
+        public Player(IUnitInput input, UnitView view, PlayerConfiguration configuration, WorldContainer worldContainer)
         {
             View = view;
+            _worldContainer = worldContainer;
             
             Weapon = new RifleWeapon(view, configuration.FireRate, configuration.Distance, configuration.Damage);
             Destroyable = new PlayerDestroyable();
             MoveComponent = new PlayerNavigation(configuration.MoveSpeed, configuration.AngularSpeed, view.transform, view.NavAgent);
             Input = input;
             
-            Input.Attack += OnAttack;
-            Input.Move += OnMove;
-
-            _moveInformation = new MoveInformation();
-            _targetInformation = new TargetInformation();
-            _stateMachine = new StateMachine(this, _moveInformation, _targetInformation, configuration);
-            _stateMachine.Enable();
+            _playerStateMachine = new PlayerStateMachine(this, _worldContainer);
+            _playerStateMachine.Enable();
         }
 
-        private void OnAttack(UnitView obj)
+        public void Dispose()
+        {
+            _playerStateMachine.Disable();
+        }
+
+        [Inject]
+        public void Initialize()
         {
             
         }
-
-        private void OnMove(Vector3 targetPosition)
-        {
-            _moveInformation.TargetPoint = targetPosition;
-        }
-        
-        public void Dispose()
-        {
-            _stateMachine.Disable();
-            Input.Attack -= OnAttack;
-            Input.Move -= OnMove;
-        }
-
     }
 
 }

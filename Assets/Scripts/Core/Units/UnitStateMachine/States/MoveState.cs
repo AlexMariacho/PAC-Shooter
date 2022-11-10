@@ -1,3 +1,4 @@
+using Core.Input;
 using Core.Views;
 using UnityEngine;
 
@@ -9,26 +10,27 @@ namespace Shooter.Core
         private IMove _mover;
         private MoveInformation _moveInformation;
 
-        public MoveState(IStateMachine stateMachine, MoveInformation moveInformation, IMove mover, Animator animator) : base(stateMachine)
+        public MoveState(IStateMachine stateMachine, Animator animator, IMove mover, MoveInformation moveInformation) : base(stateMachine)
         {
-            _moveInformation = moveInformation;
-            _mover = mover;
             _animator = animator;
+            _mover = mover;
+            _moveInformation = moveInformation;
         }
 
         public override void UpdateState()
         {
-            base.UpdateState();
             _mover.Move(_moveInformation.TargetPoint);
         }
 
         public override void EnterState()
         {
+            Debug.Log("Enter move state");
             _animator.SetBool(AnimatorConstantNames.Move, true);
         }
 
         public override void ExitState()
         {
+            Debug.Log("Exit move state");
             _animator.SetBool(AnimatorConstantNames.Move, false);
         }
 

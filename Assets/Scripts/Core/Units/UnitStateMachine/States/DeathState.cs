@@ -15,5 +15,10 @@ namespace Shooter.Core
         {
             throw new System.NotImplementedException();
         }
+
+        public override void UpdateState()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
