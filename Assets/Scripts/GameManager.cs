@@ -3,34 +3,37 @@ using Core.Configurations;
 using Core.Input;
 using Shooter.Core;
 using UnityEngine;
+using Zenject;
 
 namespace Shooter
 {
-    public class GameManager
+    public class GameManager : IInitializable
     {
         private Camera _camera;
         private PlayerConfiguration _configuration;
-        private RootObjects _rootObjects;
+        private WorldContainer _worldContainer;
 
-        public GameManager(Camera camera, PlayerConfiguration configuration, RootObjects rootObjects)
+        private PlayerFactory _playerFactory;
+
+        [Inject]
+        public void Initialize()
+        {
+        }
+
+        [Inject]
+        private void Construct(Camera camera, PlayerConfiguration configuration, WorldContainer worldContainer, PlayerFactory playerFactory)
         {
             _camera = camera;
             _configuration = configuration;
-            _rootObjects = rootObjects;
+            _worldContainer = worldContainer;
+            _playerFactory = playerFactory;
         }
 
         public void Start()
         {
-            var player = CreatePlayer(new UiInput(_camera), _configuration);
-            player.View.transform.SetParent(_rootObjects.Units);
+            var player = _playerFactory.Create(new UiInput(_camera), _configuration, _worldContainer);
+            var bot =_playerFactory.Create(new DummyInput(), _configuration, _worldContainer);
+            bot.View.transform.position = new Vector3(5, 0, 0);
         }
-
-        private Player CreatePlayer(IUnitInput input, PlayerConfiguration configuration)
-        {
-            var view = GameObject.Instantiate(configuration.View);
-            Player player = new Player(input, view, configuration);
-            return player;
-        }
-
     }
 }
