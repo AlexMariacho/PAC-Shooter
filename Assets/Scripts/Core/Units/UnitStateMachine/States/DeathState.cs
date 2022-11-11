@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Shooter.Core
 {
     public class DeathState : BaseState
@@ -8,17 +10,17 @@ namespace Shooter.Core
 
         public override void EnterState()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("Enter DEATH state");
         }
 
         public override void ExitState()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("Enter DEATH state");
         }
 
         public override void UpdateState()
         {
-            throw new System.NotImplementedException();
+           
         }
     }
 }

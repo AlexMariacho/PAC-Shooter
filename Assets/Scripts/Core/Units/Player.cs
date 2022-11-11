@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using Core;
 using Core.Configurations;
 using Core.Input;
@@ -8,7 +7,7 @@ using Zenject;
 
 namespace Shooter.Core
 {
-    public class Player : BaseUnit, IInitializable, IDisposable
+    public class Player : BaseUnit, IDisposable
     {
         public IMove MoveComponent;
         public IWeapon Weapon;
@@ -23,11 +22,11 @@ namespace Shooter.Core
             _worldContainer = worldContainer;
             
             Weapon = new RifleWeapon(view, configuration.FireRate, configuration.Distance, configuration.Damage);
-            Destroyable = new PlayerDestroyable();
+            Destroyable = new PlayerDestroyable(configuration.Hp);
             MoveComponent = new PlayerNavigation(configuration.MoveSpeed, configuration.AngularSpeed, view.transform, view.NavAgent);
             Input = input;
             
-            _playerStateMachine = new PlayerStateMachine(this, _worldContainer);
+            _playerStateMachine = new PlayerStateMachine(this, configuration, _worldContainer);
             _playerStateMachine.Enable();
         }
 
@@ -35,12 +34,7 @@ namespace Shooter.Core
         {
             _playerStateMachine.Disable();
         }
-
-        [Inject]
-        public void Initialize()
-        {
-            
-        }
+        
     }
 
 }

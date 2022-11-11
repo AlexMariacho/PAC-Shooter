@@ -8,5 +8,6 @@ namespace Core.Views
         [field: SerializeField] public Animator Animator { get; private set; }
         [field: SerializeField] public AnimatorEventHandler AnimatorEventHandler { get; private set; }
         [field: SerializeField] public NavMeshAgent NavAgent { get; private set; }
+        [field: SerializeField] public HpBar HpBar { get; private set; }
     }
 }

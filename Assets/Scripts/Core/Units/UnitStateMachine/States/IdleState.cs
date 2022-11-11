@@ -15,6 +15,7 @@ namespace Shooter.Core
 
         public override void ExitState()
         {
+            Debug.Log("Exit Idle");
         }
 
         public override void UpdateState()

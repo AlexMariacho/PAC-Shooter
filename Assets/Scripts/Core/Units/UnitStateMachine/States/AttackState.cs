@@ -8,11 +8,13 @@ namespace Shooter.Core
     {
         private IWeapon _weapon;
         private TargetInformation _targetInformation;
+        private Animator _animator;
 
-        public AttackState(IStateMachine stateMachine, TargetInformation targetInformation, IWeapon weapon) : base(stateMachine)
+        public AttackState(IStateMachine stateMachine, TargetInformation targetInformation, IWeapon weapon, Animator animator) : base(stateMachine)
         {
             _weapon = weapon;
             _targetInformation = targetInformation;
+            _animator = animator;
         }
 
         public override void UpdateState()
@@ -22,10 +24,14 @@ namespace Shooter.Core
 
         public override void EnterState()
         {
+            Debug.Log("Enter Attack state");
+            _animator.SetBool(AnimatorConstantNames.Attack, true);
         }
 
         public override void ExitState()
         {
+            Debug.Log("Enter Attack state");
+            _animator.SetBool(AnimatorConstantNames.Attack, false);
         }
     }
 }

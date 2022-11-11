@@ -5,13 +5,15 @@ namespace Shooter.Core
     [Serializable]
     public class TransitionInformation
     {
-        public Func<bool> Condition;
-        public BaseState NextState;
+        public TransitionEventType TransitionEvent { get; private set; }
+        public BaseState FromState { get; private set; }
+        public BaseState ToState { get; private set; }
 
-        public TransitionInformation(Func<bool> condition, BaseState nextState)
+        public TransitionInformation(TransitionEventType transitionEvent, BaseState fromState, BaseState toState)
         {
-            Condition = condition;
-            NextState = nextState;
+            TransitionEvent = transitionEvent;
+            FromState = fromState;
+            ToState = toState;
         }
     }
 }

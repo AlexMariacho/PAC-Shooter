@@ -11,13 +11,11 @@ namespace Core.Views
         private void FireEvent()
         {
             FireMoment?.Invoke();
-            Debug.Log("FIRE");
         }
 
         private void DeathEvent()
         {
             Death?.Invoke();
-            Debug.Log("Death");
         }
     }
 }
