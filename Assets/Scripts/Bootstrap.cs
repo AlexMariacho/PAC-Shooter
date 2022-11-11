@@ -17,6 +17,8 @@ namespace Shooter
         {
             _playerFactory = new PlayerFactory(_playerPrefab, _rootObjects);
             _playerFactory.Create(new UiInput(_camera));
+            var dummy = _playerFactory.Create(new DummyInput());
+            dummy.transform.position = new Vector3(10, 0, 0);
         }
     }
 }

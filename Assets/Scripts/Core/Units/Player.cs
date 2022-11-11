@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Core.Views;
 using UnityEngine;
 
 namespace Shooter.Simple.Units
@@ -7,7 +8,8 @@ namespace Shooter.Simple.Units
     public class Player : BaseUnit
     {
         [field: SerializeField] public PlayerConfiguration Configuration { get; private set; }
-
+        [SerializeField] private PlayerView _playerView;
+        
         public event Action<PlayerState> ChangeState;
 
         public PlayerModel PlayerModel { get; private set; }
@@ -24,6 +26,7 @@ namespace Shooter.Simple.Units
         {
             Model = model;
             PlayerModel = playerModel;
+            _playerView.Initialize(this);
             
             PlayerModel.Input.Attack += OnAttack;
             PlayerModel.Input.Move += OnMove;

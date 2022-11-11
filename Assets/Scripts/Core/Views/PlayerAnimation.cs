@@ -7,15 +7,16 @@ namespace Shooter.Simple.Units
     RequireComponent(typeof(Animator))]
     public class PlayerAnimation : MonoBehaviour
     {
-        [SerializeField] private Player _player;
         [SerializeField] private Animator _animator;
-
+        private Player _player;
+        
         private const string KeyMoveAnimation = "IsMove";
         private const string KeyAttackAnimation = "IsAttack";
         private const string KeyDeathAnimation = "IsDeath";
 
-        private void OnEnable()
+        public void Initialize(Player player)
         {
+            _player = player;
             _player.ChangeState += OnChangePlayerState;
         }
 
@@ -41,6 +42,11 @@ namespace Shooter.Simple.Units
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
+        }
+
+        private void OnDestroy()
+        {
+            _player.ChangeState -= OnChangePlayerState;
         }
     }
 }
