@@ -18,7 +18,7 @@ namespace Shooter.Simple.Units
         private Vector3 _targetMovePosition;
         private IEnumerator _moveCoroutine;
 
-        private Player _targetAttack;
+        private BaseUnit _targetAttack;
         private IEnumerator _attackCoroutine;
         private IEnumerator _checkAttackDistanceCoroutine;
 
@@ -40,6 +40,7 @@ namespace Shooter.Simple.Units
             if (targetView != this &&
                 Vector3.Distance(transform.position, targetView.transform.position) < Configuration.Distance)
             {
+                _targetAttack = targetView;
                 SetState(PlayerState.Attack);
             }
         }
@@ -93,14 +94,14 @@ namespace Shooter.Simple.Units
             SetState(PlayerState.Idle);
         }
 
-        private IEnumerator AttackTarget(Player target)
+        private IEnumerator AttackTarget(BaseUnit target)
         {
             PlayerModel.Weapon.Fire();
             yield return new WaitUntil(() => target.Model.Destroyable.Hp > 0);
             SetState(PlayerState.Idle);
         }
 
-        private IEnumerator CheckAttackDistance(Player target)
+        private IEnumerator CheckAttackDistance(BaseUnit target)
         {
             yield return new WaitUntil(() =>
                 Vector3.Distance(transform.position, target.transform.position) < Configuration.Distance);

@@ -8,7 +8,7 @@ namespace Core.Views
         
         private void Update()
         {
-            transform.rotation = Quaternion.Euler(new Vector3(0, -_rootTransform.rotation.y, 0));
+            transform.rotation = Quaternion.Euler(new Vector3(90, -_rootTransform.rotation.y, 0));
         }
     }
 }
