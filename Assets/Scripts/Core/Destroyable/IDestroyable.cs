@@ -7,6 +7,7 @@ namespace Shooter.Core
         event Action Death;
         event Action<int> ChangeHp;
         int Hp { get; }
+        int MaxHp { get; }
         void TakeDamage(int damage);
     }
 }

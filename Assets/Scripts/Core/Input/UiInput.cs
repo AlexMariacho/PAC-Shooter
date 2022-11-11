@@ -1,5 +1,5 @@
 using System;
-using Core.Views;
+using Shooter.Simple.Units;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +8,7 @@ namespace Core.Input
     public class UiInput : IUnitInput, IDisposable
     {
         public event Action<Vector3> Move;
-        public event Action<UnitView> Attack;
+        public event Action<BaseUnit> Attack;
 
         private Camera _camera;
         private UnityInputSystem _input;
@@ -28,9 +28,9 @@ namespace Core.Input
         
             if (Physics.Raycast(ray, out hit)) 
             {
-                if (hit.transform.TryGetComponent(out UnitView view))
+                if (hit.transform.TryGetComponent(out BaseUnit unit))
                 {
-                    Attack?.Invoke(view);
+                    Attack?.Invoke(unit);
                     return;
                 }
 

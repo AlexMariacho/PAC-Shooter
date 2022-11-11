@@ -3,7 +3,6 @@ using Shooter.Network.Messages;
 
 namespace Shooter.Network
 {
-    public delegate void ChangeCommandHandler(CommandType command);
     
     public class NetworkManager
     {
@@ -11,7 +10,7 @@ namespace Shooter.Network
         private bool _isHost;
 
         public event Action Disconnected;
-        public event ChangeCommandHandler ChangeCommand;
+        //public event ChangeCommandHandler ChangeCommand;
 
         public bool IsHost => _isHost;
 
@@ -30,10 +29,10 @@ namespace Shooter.Network
 
         private void NetworkOnReceiveMessage(int id, IMessage message)
         {
-            if (message is ChangeCommandMessage command)
-            {
-                ChangeCommand?.Invoke(command.Type);
-            }
+            // if (message is ChangeCommandMessage command)
+            // {
+            //     ChangeCommand?.Invoke(command.Type);
+            // }
         }
 
         private void NetworkOnDisconnected(int id)

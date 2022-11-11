@@ -519,16 +519,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 963194227}
-  _playerConfiguration:
-    Hp: 20
-    MoveSpeed: 5
-    AngularSpeed: 120
-    Damage: 1
-    FireRate: 2
-    Distance: 10
-    View: {fileID: 646791123, guid: 0bb7026eb0b8da74387be710b322379c, type: 3}
-  _rootObjects:
-    Units: {fileID: 735465744}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,6 +782,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a835db9dca94068a0774a9324787292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rootObjects:
+    Units: {fileID: 735465744}
+  _camera: {fileID: 963194227}
+  _playerPrefab: {fileID: 7775295038857682841, guid: 0bb7026eb0b8da74387be710b322379c, type: 3}
 --- !u!1 &1711300024
 GameObject:
   m_ObjectHideFlags: 0

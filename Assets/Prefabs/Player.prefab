@@ -361,11 +361,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2106585151094673546}
   - component: {fileID: 85870148452666392}
+  - component: {fileID: 7775295038857682841}
+  - component: {fileID: 6966594644080210705}
   - component: {fileID: 646791125}
   - component: {fileID: 646791124}
-  - component: {fileID: 646791122}
-  - component: {fileID: 646791123}
-  - component: {fileID: -7822759651418856901}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -414,6 +413,39 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7775295038857682841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2106585151094639786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98fc0f369194aa2a2ac6b0a7106b00e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Configuration>k__BackingField:
+    Hp: 10
+    MoveSpeed: 3
+    AngularSpeed: 160
+    FireRate: 2
+    Damage: 1
+    Distance: 10
+--- !u!114 &6966594644080210705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2106585151094639786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ec9c8f1bff4506a64c16781f08519d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 7775295038857682841}
+  _animator: {fileID: 85870148452666392}
 --- !u!54 &646791125
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -444,55 +476,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &646791122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2106585151094639786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb927c1083934d42afa45922de6d3705, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &646791123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2106585151094639786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 332d593d39ee46b9acda3e465efc99ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Animator>k__BackingField: {fileID: 85870148452666392}
-  <AnimatorEventHandler>k__BackingField: {fileID: 646791122}
-  <NavAgent>k__BackingField: {fileID: -7822759651418856901}
---- !u!195 &-7822759651418856901
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2106585151094639786}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1 &2106585151094639788
 GameObject:
   m_ObjectHideFlags: 0
@@ -2047,7 +2030,6 @@ GameObject:
   - component: {fileID: 5926713297432869251}
   - component: {fileID: 5500180049585229160}
   - component: {fileID: 430084331616000951}
-  - component: {fileID: 5978762373348105017}
   m_Layer: 0
   m_Name: HpCanvas
   m_TagString: Untagged
@@ -2137,19 +2119,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5978762373348105017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2515442179254928957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fda9157cdb1d453685f92aabe4a6ca3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rootTransform: {fileID: 2106585151094673546}
 --- !u!1001 &2736567522070957325
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,14 +1,12 @@
-using System;
 using Core.Views;
+using UnityEngine;
 
-namespace Shooter.Core
+namespace Shooter.Simple.Units
 {
-    [Serializable]
-    public class BaseUnit
+    public class BaseUnit : MonoBehaviour
     {
-        public IDestroyable Destroyable { get; protected set; }
-        public UnitView View;
+        [SerializeField] protected HpBar _hpBarView;
+        public UnitModel Model { get; protected set; }
+        
     }
-
-
 }

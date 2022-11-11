@@ -1,40 +1,135 @@
 using System;
-using Core;
-using Core.Configurations;
-using Core.Input;
-using Core.Views;
-using Zenject;
+using System.Collections;
+using UnityEngine;
 
-namespace Shooter.Core
+namespace Shooter.Simple.Units
 {
-    public class Player : BaseUnit, IDisposable
+    public class Player : BaseUnit
     {
-        public IMove MoveComponent;
-        public IWeapon Weapon;
-        public IUnitInput Input;
+        [field: SerializeField] public PlayerConfiguration Configuration { get; private set; }
 
-        private WorldContainer _worldContainer;
-        private PlayerStateMachine _playerStateMachine;
+        public event Action<PlayerState> ChangeState;
 
-        public Player(IUnitInput input, UnitView view, PlayerConfiguration configuration, WorldContainer worldContainer)
+        public PlayerModel PlayerModel { get; private set; }
+        public PlayerState CurrentState { get; private set; }
+        
+        private Vector3 _targetMovePosition;
+        private IEnumerator _moveCoroutine;
+
+        private Player _targetAttack;
+        private IEnumerator _attackCoroutine;
+        private IEnumerator _checkAttackDistanceCoroutine;
+
+        public void Initialize(UnitModel model, PlayerModel playerModel)
         {
-            View = view;
-            _worldContainer = worldContainer;
+            Model = model;
+            PlayerModel = playerModel;
             
-            Weapon = new RifleWeapon(view, configuration.FireRate, configuration.Distance, configuration.Damage);
-            Destroyable = new PlayerDestroyable(configuration.Hp);
-            MoveComponent = new PlayerNavigation(configuration.MoveSpeed, configuration.AngularSpeed, view.transform, view.NavAgent);
-            Input = input;
-            
-            _playerStateMachine = new PlayerStateMachine(this, configuration, _worldContainer);
-            _playerStateMachine.Enable();
+            PlayerModel.Input.Attack += OnAttack;
+            PlayerModel.Input.Move += OnMove;
+            Model.Destroyable.Death += OnDeath;
+
+            SetState(PlayerState.Idle);
         }
 
-        public void Dispose()
+        private void OnAttack(BaseUnit targetView)
         {
-            _playerStateMachine.Disable();
+            if (targetView != this &&
+                Vector3.Distance(transform.position, targetView.transform.position) < Configuration.Distance)
+            {
+                SetState(PlayerState.Attack);
+            }
+        }
+
+        private void OnMove(Vector3 point)
+        {
+            _targetMovePosition = point;
+            SetState(PlayerState.Move);
+        }
+
+        private void OnDeath()
+        {
+            SetState(PlayerState.Death);
+        }
+
+        private void SetState(PlayerState state)
+        {
+            StopAllCoroutines();
+            switch (state)
+            {
+                case PlayerState.Idle:
+                    CurrentState = PlayerState.Idle;
+                    break;
+                case PlayerState.Move:
+                    _moveCoroutine = MoveToPoint(_targetMovePosition);
+                    StartCoroutine(_moveCoroutine);
+                    CurrentState = PlayerState.Move;
+                    break;
+                case PlayerState.Attack:
+                    _attackCoroutine = AttackTarget(_targetAttack);
+                    _checkAttackDistanceCoroutine = CheckAttackDistance(_targetAttack);
+                    StartCoroutine(_attackCoroutine);
+                    StartCoroutine(_checkAttackDistanceCoroutine);
+                    CurrentState = PlayerState.Attack;
+                    break;
+                case PlayerState.Death:
+                    CurrentState = PlayerState.Death;
+                    Dispose();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+            }
+            ChangeState?.Invoke(CurrentState);
+            Debug.Log($"Set state {state.ToString()}");
+        }
+
+        private IEnumerator MoveToPoint(Vector3 point)
+        {
+            PlayerModel.Mover.Move(point);
+            yield return new WaitUntil(() => Vector3.Distance(transform.position, point) < 0.1f);
+            SetState(PlayerState.Idle);
+        }
+
+        private IEnumerator AttackTarget(Player target)
+        {
+            PlayerModel.Weapon.Fire();
+            yield return new WaitUntil(() => target.Model.Destroyable.Hp > 0);
+            SetState(PlayerState.Idle);
+        }
+
+        private IEnumerator CheckAttackDistance(Player target)
+        {
+            yield return new WaitUntil(() =>
+                Vector3.Distance(transform.position, target.transform.position) < Configuration.Distance);
+            SetState(PlayerState.Idle);
         }
         
+        private void Dispose()
+        {
+            PlayerModel.Input.Attack -= OnAttack;
+            PlayerModel.Input.Move -= OnMove;
+            Model.Destroyable.Death -= OnDeath;
+        }
+
     }
 
+    [Serializable]
+    public class PlayerConfiguration
+    {
+        public int Hp;
+        public float MoveSpeed;
+        public float AngularSpeed;
+        
+        public float FireRate;
+        public int Damage;
+        public float Distance;
+    }
+
+    public enum PlayerState
+    {
+        Idle,
+        Move,
+        Attack,
+        Death
+    }
 }

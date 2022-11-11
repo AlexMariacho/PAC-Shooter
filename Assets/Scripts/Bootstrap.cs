@@ -1,26 +1,22 @@
-using System.ComponentModel;
+using Core;
+using Core.Factory;
 using Core.Input;
+using Shooter.Simple.Units;
 using UnityEngine;
-using Zenject;
 
 namespace Shooter
 {
     public class Bootstrap : MonoBehaviour
     {
-        private GameManager _gameManager;
-
-        [Inject]
-        private void Construct(GameManager gameManager)
-        {
-            _gameManager = gameManager;
-        }
+        [SerializeField] public RootObjects _rootObjects;
+        [SerializeField] public Camera _camera;
+        [SerializeField] private Player _playerPrefab;
+        private PlayerFactory _playerFactory;
 
         private void Start()
         {
-            _gameManager.Start();
-
-            // var test = _testFactory.Create(new DummyInput());
-            // var test2 = _testFactory.Create(new DummySecondInput());
+            _playerFactory = new PlayerFactory(_playerPrefab, _rootObjects);
+            _playerFactory.Create(new UiInput(_camera));
         }
     }
 }
