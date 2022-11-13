@@ -19,7 +19,7 @@ namespace Shooter.Core
         {
             Hp -= damage;
             
-            
+            ChangeHp?.Invoke(Hp);
             if (Hp <= 0)
             {
                 Hp = 0;

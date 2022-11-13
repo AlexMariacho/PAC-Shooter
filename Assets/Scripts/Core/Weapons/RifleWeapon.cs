@@ -1,51 +1,57 @@
+using System.Collections;
+using Core.Views;
 using Shooter.Simple.Units;
 using UnityEngine;
 
 namespace Shooter.Core
 {
-    public class RifleWeapon : IWeapon
+    public class RifleWeapon : BaseWeapon
     {
-        private float _fireRate;
-        private float _distance;
-        private int _damage;
+        [SerializeField] private LineRenderer _fireLine;
+        [SerializeField] private Transform _firePoint;
+        private PlayerAnimation _playerAnimation;
         
-        private float _currentReloadTime;
-        private Player _target;
+        private BaseUnit _target;
+        private Transform _selfTransform;
+        private AnimatorEventHandler _eventHandler;
 
-        // public RifleWeapon(UnitView selfView, float fireRate, float distance, int damage)
-        // {
-        //     _selfView = selfView;
-        //     _fireRate = fireRate;
-        //     _distance = distance;
-        //     _damage = damage;
-        //
-        //     _selfView.AnimatorEventHandler.FireMoment += OnTakeDamage;
-        // }
-
-        public void Fire()
+        public override void Initialize(Transform selfView, PlayerAnimation playerAnimation, AnimatorEventHandler eventHandler)
         {
+            _selfTransform = selfView;
             
+            _playerAnimation = playerAnimation;
+            _playerAnimation.SetFireRate(Configuration.FireRate);
+
+            _eventHandler = eventHandler;
+            _eventHandler.FireMoment += OnTakeDamage;
         }
 
-        // public void Fire(Player target)
-        // {
-        //     _target = target;
-        //     if (_currentReloadTime < _fireRate)
-        //     {
-        //         _currentReloadTime += Time.deltaTime;
-        //     }
-        //
-        //     if (Vector3.Distance(_selfView.transform.position, target.transform.position) > _distance)
-        //     {
-        //         return;
-        //     }
-        //     
-        //     _selfView.transform.LookAt(target.transform.position);
-        // }
-        //
-        // private void OnTakeDamage()
-        // {
-        //     _target.Model.Destroyable.TakeDamage(_damage);
-        // }
+        public override void Fire(BaseUnit target)
+        {
+            _target = target;
+            
+            if (Vector3.Distance(_selfTransform.position, target.transform.position) > Configuration.Distance)
+            {
+                return;
+            }
+            
+            _selfTransform.LookAt(target.transform.position);
+        }
+        
+        private void OnTakeDamage()
+        {
+            _target.Model.Destroyable.TakeDamage(Configuration.Damage);
+            StartCoroutine(ShowFireLine(_target.transform.position));
+        }
+
+        private IEnumerator ShowFireLine(Vector3 targetPosition)
+        {
+            _fireLine.gameObject.SetActive(true);
+            _fireLine.SetPosition(0, _firePoint.transform.position);
+            _fireLine.SetPosition(1, targetPosition);
+            yield return new WaitForSeconds(0.1f);
+            _fireLine.gameObject.SetActive(false);
+        }
+
     }
 }

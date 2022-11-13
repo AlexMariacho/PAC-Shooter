@@ -30,7 +30,8 @@ namespace Core.Factory
             NavMeshAgent navMeshAgent = player.gameObject.AddComponent<NavMeshAgent>();
             playerModel.Mover = new PlayerNavigation(configuration.MoveSpeed, configuration.AngularSpeed, player.transform,
                 navMeshAgent);
-            playerModel.Weapon = new RifleWeapon();
+            playerModel.Weapon = player.GetComponent<BaseWeapon>();
+            playerModel.Weapon.Initialize(player.transform, player.View.PlayerAnimation, player.View.AnimatorEventHandler);
             playerModel.Input = _input;
             
             player.Initialize(unitModel, playerModel);

@@ -1,15 +1,17 @@
 using System;
 using System.Collections;
 using Core.Views;
+using Shooter.Core;
 using UnityEngine;
 
 namespace Shooter.Simple.Units
 {
+    [RequireComponent(typeof(BaseWeapon))]
     public class Player : BaseUnit
     {
         [field: SerializeField] public PlayerConfiguration Configuration { get; private set; }
-        [SerializeField] private PlayerView _playerView;
-        
+        [field: SerializeField] public PlayerView View { get; private set; }
+
         public event Action<PlayerState> ChangeState;
 
         public PlayerModel PlayerModel { get; private set; }
@@ -26,7 +28,7 @@ namespace Shooter.Simple.Units
         {
             Model = model;
             PlayerModel = playerModel;
-            _playerView.Initialize(this);
+            View.Initialize(this);
             
             PlayerModel.Input.Attack += OnAttack;
             PlayerModel.Input.Move += OnMove;
@@ -38,7 +40,7 @@ namespace Shooter.Simple.Units
         private void OnAttack(BaseUnit targetView)
         {
             if (targetView != this &&
-                Vector3.Distance(transform.position, targetView.transform.position) < Configuration.Distance)
+                Vector3.Distance(transform.position, targetView.transform.position) < PlayerModel.Weapon.Configuration.Distance)
             {
                 _targetAttack = targetView;
                 SetState(PlayerState.Attack);
@@ -96,15 +98,19 @@ namespace Shooter.Simple.Units
 
         private IEnumerator AttackTarget(BaseUnit target)
         {
-            PlayerModel.Weapon.Fire();
-            yield return new WaitUntil(() => target.Model.Destroyable.Hp > 0);
+            PlayerModel.Mover.Move(transform.position);
+            while (target.Model.Destroyable.Hp > 0)
+            {
+                PlayerModel.Weapon.Fire(target);
+                yield return null;
+            }
             SetState(PlayerState.Idle);
         }
 
         private IEnumerator CheckAttackDistance(BaseUnit target)
         {
             yield return new WaitUntil(() =>
-                Vector3.Distance(transform.position, target.transform.position) < Configuration.Distance);
+                Vector3.Distance(transform.position, target.transform.position) > PlayerModel.Weapon.Configuration.Distance);
             SetState(PlayerState.Idle);
         }
         
@@ -123,10 +129,6 @@ namespace Shooter.Simple.Units
         public int Hp;
         public float MoveSpeed;
         public float AngularSpeed;
-        
-        public float FireRate;
-        public int Damage;
-        public float Distance;
     }
 
     public enum PlayerState

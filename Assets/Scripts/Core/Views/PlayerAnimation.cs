@@ -10,14 +10,20 @@ namespace Shooter.Simple.Units
         [SerializeField] private Animator _animator;
         private Player _player;
         
-        private const string KeyMoveAnimation = "IsMove";
-        private const string KeyAttackAnimation = "IsAttack";
-        private const string KeyDeathAnimation = "IsDeath";
-
+        private static readonly int FireRate = Animator.StringToHash("FireRate");
+        private static readonly int IsMove = Animator.StringToHash("IsMove");
+        private static readonly int IsAttack = Animator.StringToHash("IsAttack");
+        private static readonly int IsDeath = Animator.StringToHash("IsDeath");
+        
         public void Initialize(Player player)
         {
             _player = player;
             _player.ChangeState += OnChangePlayerState;
+        }
+
+        public void SetFireRate(float fireRate)
+        {
+            _animator.SetFloat(FireRate, fireRate);
         }
 
         private void OnChangePlayerState(PlayerState state)
@@ -25,19 +31,19 @@ namespace Shooter.Simple.Units
             switch (state)
             {
                 case PlayerState.Idle:
-                    _animator.SetBool(KeyMoveAnimation, false);
-                    _animator.SetBool(KeyAttackAnimation, false);
+                    _animator.SetBool(IsMove, false);
+                    _animator.SetBool(IsAttack, false);
                     break;
                 case PlayerState.Move:
-                    _animator.SetBool(KeyMoveAnimation, true);
-                    _animator.SetBool(KeyAttackAnimation, false);
+                    _animator.SetBool(IsMove, true);
+                    _animator.SetBool(IsAttack, false);
                     break;
                 case PlayerState.Attack:
-                    _animator.SetBool(KeyMoveAnimation, false);
-                    _animator.SetBool(KeyAttackAnimation, true);
+                    _animator.SetBool(IsMove, false);
+                    _animator.SetBool(IsAttack, true);
                     break;
                 case PlayerState.Death:
-                    _animator.SetBool(KeyDeathAnimation, true);
+                    _animator.SetBool(IsDeath, true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
