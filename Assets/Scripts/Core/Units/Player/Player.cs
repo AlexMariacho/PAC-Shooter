@@ -35,6 +35,16 @@ namespace Shooter.Core
             SetState(PlayerState.Idle);
         }
 
+        public override void Reset()
+        {
+            _targetAttack = null;
+            int maxHp = Model.Destroyable.MaxHp;
+            Model.Destroyable = new PlayerDestroyable(maxHp);
+            View.Initialize(this);
+            
+            SetState(PlayerState.Idle);
+        }
+
         private void OnAttack(BaseUnit targetView)
         {
             if (targetView != this &&
@@ -110,29 +120,13 @@ namespace Shooter.Core
                 Vector3.Distance(transform.position, target.transform.position) > PlayerModel.Weapon.Configuration.Distance);
             SetState(PlayerState.Idle);
         }
-        
+
         private void Dispose()
         {
             PlayerModel.Input.Attack -= OnAttack;
             PlayerModel.Input.Move -= OnMove;
             Model.Destroyable.Death -= OnDeath;
         }
-
     }
-
-    [Serializable]
-    public class PlayerConfiguration
-    {
-        public int Hp;
-        public float MoveSpeed;
-        public float AngularSpeed;
-    }
-
-    public enum PlayerState
-    {
-        Idle,
-        Move,
-        Attack,
-        Death
-    }
+    
 }
