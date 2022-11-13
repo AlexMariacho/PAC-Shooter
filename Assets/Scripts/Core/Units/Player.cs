@@ -86,7 +86,6 @@ namespace Shooter.Simple.Units
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
             ChangeState?.Invoke(CurrentState);
-            Debug.Log($"Set state {state.ToString()}");
         }
 
         private IEnumerator MoveToPoint(Vector3 point)
