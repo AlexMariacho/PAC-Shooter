@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
-using Core.Views;
-using Shooter.Core;
 using UnityEngine;
 
-namespace Shooter.Simple.Units
+namespace Shooter.Core
 {
     [RequireComponent(typeof(BaseWeapon))]
     public class Player : BaseUnit

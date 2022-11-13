@@ -1,6 +1,4 @@
 using System;
-using Core.Views;
-using Shooter.Simple.Units;
 using UnityEngine;
 
 namespace Shooter.Core

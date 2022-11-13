@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Shooter.Simple.Units
+namespace Shooter.Core
 {
     [RequireComponent(typeof(Player)),
     RequireComponent(typeof(Animator))]

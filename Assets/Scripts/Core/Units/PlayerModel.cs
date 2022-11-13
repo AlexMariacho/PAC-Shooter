@@ -1,7 +1,4 @@
-using Core.Input;
-using Shooter.Core;
-
-namespace Shooter.Simple.Units
+namespace Shooter.Core
 {
     public class PlayerModel
     {

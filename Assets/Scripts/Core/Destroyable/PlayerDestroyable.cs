@@ -2,7 +2,7 @@ using System;
 
 namespace Shooter.Core
 {
-    public class PlayerDestroyable : IDestroyable
+    public sealed class PlayerDestroyable : IDestroyable
     {
         public event Action Death;
         public event Action<int> ChangeHp;

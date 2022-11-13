@@ -1,8 +1,7 @@
 using System;
-using Shooter.Simple.Units;
 using UnityEngine;
 
-namespace Core.Input
+namespace Shooter.Core
 {
     public class DummyInput : IUnitInput
     {

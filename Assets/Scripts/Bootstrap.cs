@@ -1,7 +1,5 @@
 using Core;
-using Core.Factory;
-using Core.Input;
-using Shooter.Simple.Units;
+using Shooter.Core;
 using UnityEngine;
 
 namespace Shooter
@@ -15,7 +13,7 @@ namespace Shooter
 
         private void Start()
         {
-            _playerFactory = new PlayerFactory(_playerPrefab, _rootObjects);
+            _playerFactory = new PlayerFactory(_playerPrefab, _rootObjects.Units);
             _playerFactory.Create(new UiInput(_camera));
             var dummy = _playerFactory.Create(new DummyInput());
             dummy.transform.position = new Vector3(10, 0, 0);

@@ -2,7 +2,7 @@ using Shooter.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.Views
+namespace Shooter.Core
 {
     public class HpBar : MonoBehaviour
     {

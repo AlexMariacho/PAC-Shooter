@@ -1,9 +1,7 @@
 using System;
-using Core.Views;
-using Shooter.Simple.Units;
 using UnityEngine;
 
-namespace Core.Input
+namespace Shooter.Core
 {
     public class NetworkInput : IUnitInput
     {

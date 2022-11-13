@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Core.Views
+namespace Shooter.Core
 {
     public class AnimatorEventHandler : MonoBehaviour
     {

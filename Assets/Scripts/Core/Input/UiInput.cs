@@ -1,9 +1,8 @@
 using System;
-using Shooter.Simple.Units;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Core.Input
+namespace Shooter.Core
 {
     public class UiInput : IUnitInput, IDisposable
     {

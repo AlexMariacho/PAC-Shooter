@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Views
+namespace Shooter.Core
 {
     public class HpBarPositionCorrector : MonoBehaviour
     {

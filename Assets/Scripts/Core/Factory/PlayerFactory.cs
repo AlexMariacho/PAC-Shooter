@@ -1,27 +1,24 @@
-using Core.Input;
-using Shooter.Core;
-using Shooter.Simple.Units;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Core.Factory
+namespace Shooter.Core
 {
-    public class PlayerFactory : BaseFactory<Player>
+    public sealed class PlayerFactory : BaseFactory<Player>
     {
-        private RootObjects _rootObjects;
+        private Transform _rootObject;
         private Player _playerPrefab;
         private IUnitInput _input;
         
-        public PlayerFactory(Player playerPrefab, RootObjects rootObjects)
+        public PlayerFactory(Player playerPrefab, Transform rootObject)
         {
-            _rootObjects = rootObjects;
+            _rootObject = rootObject;
             _playerPrefab = playerPrefab;
             _input = new DummyInput();
         }
 
         public override Player Create()
         {
-            Player player = GameObject.Instantiate(_playerPrefab, _rootObjects.Units);
+            Player player = GameObject.Instantiate(_playerPrefab, _rootObject);
             PlayerConfiguration configuration = player.Configuration;
             UnitModel unitModel = new UnitModel();
             unitModel.Destroyable = new PlayerDestroyable(configuration.Hp);

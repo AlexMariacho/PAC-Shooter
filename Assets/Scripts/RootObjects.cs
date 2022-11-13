@@ -7,5 +7,6 @@ namespace Core
     public class RootObjects
     {
         public Transform Units;
+        public Transform Ui;
     }
 }

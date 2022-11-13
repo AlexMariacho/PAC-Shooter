@@ -1,7 +1,6 @@
-using Core.Views;
 using UnityEngine;
 
-namespace Shooter.Simple.Units
+namespace Shooter.Core
 {
     public class BaseUnit : MonoBehaviour
     {

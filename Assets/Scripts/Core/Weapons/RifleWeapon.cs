@@ -1,6 +1,4 @@
 using System.Collections;
-using Core.Views;
-using Shooter.Simple.Units;
 using UnityEngine;
 
 namespace Shooter.Core
@@ -53,5 +51,5 @@ namespace Shooter.Core
             _fireLine.gameObject.SetActive(false);
         }
 
-    }
+    } 
 }
