@@ -2,9 +2,8 @@
     "name": "Shooter.Network",
     "rootNamespace": "",
     "references": [
-        "GUID:86461e0041c4f4344a86c97718262735",
-        "GUID:bbde805d927e795439d7a746d1749cab",
-        "GUID:5a46ad82eac024e4fbb6a0516a5def17"
+        "GUID:30817c1a0e6d646d99c048fc403f5979",
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
