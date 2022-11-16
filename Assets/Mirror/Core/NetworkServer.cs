@@ -1141,7 +1141,6 @@ namespace Mirror
 
         static void SpawnObject(GameObject obj, NetworkConnection ownerConnection)
         {
-            Debug.Log("SPAWN from Server");
             // verify if we can spawn this
             if (Utils.IsPrefab(obj))
             {
@@ -1458,7 +1457,7 @@ namespace Mirror
             if (mode == DestroyMode.Destroy)
             {
                 identity.destroyCalled = true;
-
+                
                 // Destroy if application is running
                 if (Application.isPlaying)
                 {

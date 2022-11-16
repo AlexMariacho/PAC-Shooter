@@ -1129,16 +1129,28 @@ namespace Mirror
             // otherwise look in NetworkManager registered prefabs
             if (GetPrefab(message.assetId, out GameObject prefab))
             {
-                Debug.Log("NetworkClient SPAWN");
                 GameObject obj = GameObject.Instantiate(prefab, message.position, message.rotation);
-                //Debug.Log($"Client spawn handler instantiating [netId{message.netId} asset ID:{message.assetId} pos:{message.position} rotation:{message.rotation}]");
+                obj.name = $"{obj.name} [connId={message.netId}]";
+                if (aoi)
+                {
+                    // This calls user code which might throw exceptions
+                    // We don't want this to leave us in bad state
+                    try
+                    {
+                        aoi.OnSpawned(obj.GetComponent<NetworkIdentity>());
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
                 return obj.GetComponent<NetworkIdentity>();
             }
 
             Debug.LogError($"Failed to spawn server object, did you forget to add it to the NetworkManager? assetId={message.assetId} netId={message.netId}");
             return null;
         }
-
+        
         static NetworkIdentity SpawnSceneObject(ulong sceneId)
         {
             NetworkIdentity identity = GetAndRemoveSceneObject(sceneId);
@@ -1404,6 +1416,19 @@ namespace Mirror
                 else if (identity.sceneId == 0)
                 {
                     // don't call reset before destroy so that values are still set in OnDestroy
+                    if (aoi)
+                    {
+                        // This calls user code which might throw exceptions
+                        // We don't want this to leave us in bad state
+                        try
+                        {
+                            aoi.OnDestroyed(identity);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogException(e);
+                        }
+                    }
                     GameObject.Destroy(identity.gameObject);
                 }
                 // scene object.. disable it in scene instead of destroying
@@ -1604,6 +1629,19 @@ namespace Mirror
                                 // spawned objects are destroyed
                                 else
                                 {
+                                    if (aoi)
+                                    {
+                                        // This calls user code which might throw exceptions
+                                        // We don't want this to leave us in bad state
+                                        try
+                                        {
+                                            aoi.OnDestroyed(identity);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Debug.LogException(e);
+                                        }
+                                    }
                                     GameObject.Destroy(identity.gameObject);
                                 }
                             }

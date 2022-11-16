@@ -7,18 +7,18 @@ namespace Shooter.Core
     {
         [SerializeField] private LineRenderer _fireLine;
         [SerializeField] private Transform _firePoint;
-        private PlayerAnimation _playerAnimation;
+        private PlayerAnimationController _playerAnimationController;
         
         private BaseUnit _target;
         private Transform _selfTransform;
         private AnimatorEventHandler _eventHandler;
 
-        public override void Initialize(Transform selfView, PlayerAnimation playerAnimation, AnimatorEventHandler eventHandler)
+        public override void Initialize(Transform selfView, PlayerAnimationController playerAnimationController, AnimatorEventHandler eventHandler)
         {
             _selfTransform = selfView;
             
-            _playerAnimation = playerAnimation;
-            _playerAnimation.SetFireRate(Configuration.FireRate);
+            _playerAnimationController = playerAnimationController;
+            _playerAnimationController.SetFireRate(Configuration.FireRate);
 
             _eventHandler = eventHandler;
             _eventHandler.FireMoment += OnTakeDamage;

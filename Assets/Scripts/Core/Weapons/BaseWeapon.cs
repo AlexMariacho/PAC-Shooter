@@ -8,7 +8,7 @@ namespace Shooter.Core
         [field: SerializeField] public WeaponConfiguration Configuration { get; protected set; }
         public abstract void Fire(BaseUnit target);
 
-        public abstract void Initialize(Transform selfView, PlayerAnimation playerAnimation,
+        public abstract void Initialize(Transform selfView, PlayerAnimationController playerAnimationController,
             AnimatorEventHandler eventHandler);
     }
 

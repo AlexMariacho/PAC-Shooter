@@ -1,10 +1,9 @@
-using Shooter.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Shooter.Core
 {
-    public class HpBar : MonoBehaviour
+    public class HpBarView : MonoBehaviour
     {
         [SerializeField] private Image _image;
         private IDestroyable _destroyable;

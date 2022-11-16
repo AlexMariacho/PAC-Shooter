@@ -5,7 +5,7 @@ namespace Shooter.Core
 {
     [RequireComponent(typeof(Player)),
     RequireComponent(typeof(Animator))]
-    public class PlayerAnimation : MonoBehaviour
+    public class PlayerAnimationController : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
         private Player _player;
@@ -52,7 +52,10 @@ namespace Shooter.Core
 
         private void OnDestroy()
         {
-            _player.ChangeState -= OnChangePlayerState;
+            if (_player != null)
+            {
+                _player.ChangeState -= OnChangePlayerState;
+            }
         }
     }
 }

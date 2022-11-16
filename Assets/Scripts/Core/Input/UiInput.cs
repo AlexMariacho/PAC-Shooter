@@ -40,6 +40,11 @@ namespace Shooter.Core
             }
         }
 
+        private void SendMove(Vector3 move)
+        {
+            
+        }
+
         public void Dispose()
         {
             _input.Player.Click.performed -= OnScreenClick;

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Core
 {
     [RequireComponent(typeof(BaseWeapon))]
-    public class Player : BaseUnit
+    public class Player : BaseUnit, IDisposable
     {
         [field: SerializeField] public PlayerConfiguration Configuration { get; private set; }
         [field: SerializeField] public PlayerView View { get; private set; }
@@ -21,17 +21,17 @@ namespace Shooter.Core
         private BaseUnit _targetAttack;
         private IEnumerator _attackCoroutine;
         private IEnumerator _checkAttackDistanceCoroutine;
-
-        public void Initialize(UnitModel model, PlayerModel playerModel)
+        
+        public void InitializeModels(UnitModel model, PlayerModel playerModel)
         {
             Model = model;
             PlayerModel = playerModel;
+            Model.Destroyable.Death += OnDeath;
             View.Initialize(this);
-            
+
             PlayerModel.Input.Attack += OnAttack;
             PlayerModel.Input.Move += OnMove;
-            Model.Destroyable.Death += OnDeath;
-
+            
             SetState(PlayerState.Idle);
         }
 
@@ -121,7 +121,7 @@ namespace Shooter.Core
             SetState(PlayerState.Idle);
         }
 
-        private void Dispose()
+        public void Dispose()
         {
             PlayerModel.Input.Attack -= OnAttack;
             PlayerModel.Input.Move -= OnMove;
