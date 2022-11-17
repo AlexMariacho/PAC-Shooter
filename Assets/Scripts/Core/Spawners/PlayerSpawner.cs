@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Cinemachine;
 using Cysharp.Threading.Tasks;
 using Network;
 using Network.Extensions;
+using Shooter.Core.Factory;
 using UnityEngine;
 using UnityEngine.AI;
+using Zenject;
+using Zenject.SpaceFighter;
 
 namespace Shooter.Core
 {
@@ -14,16 +18,15 @@ namespace Shooter.Core
         public event Action<Player> DeSpawn;
 
         private NetworkSpawner _networkSpawner;
-        private Transform _rootObject;
-        private Camera _camera;
-        private CinemachineVirtualCamera _virtualCamera;
+        private PlayerFactory _playerFactory;
 
-        public PlayerSpawner(Transform rootObject, NetworkSpawner networkServer, Camera camera, CinemachineVirtualCamera virtualCamera)
+        private Dictionary<PlayerView, Player> _viewToPlayer = new Dictionary<PlayerView, Player>();
+
+        [Inject]
+        public void Construct(NetworkSpawner networkServer, PlayerFactory factory)
         {
-            _rootObject = rootObject;
             _networkSpawner = networkServer;
-            _camera = camera;
-            _virtualCamera = virtualCamera;
+            _playerFactory = factory;
 
             _networkSpawner.Spawn += OnSpawn;
             _networkSpawner.DeSpawn += OnDeSpawn;
@@ -31,47 +34,31 @@ namespace Shooter.Core
 
         private async void OnSpawn(GameObject gameObject)
         {
-            if (gameObject.TryGetComponent(out Player player))
+            if (gameObject.TryGetComponent(out PlayerView playerView))
             {
-                await UniTask.WaitUntil(() => player.IsReady());
-                PlayerConfiguration configuration = player.Configuration;
-                UnitModel unitModel = new UnitModel();
-                unitModel.Destroyable = new PlayerDestroyable(configuration.Hp);
-
-                PlayerModel playerModel = new PlayerModel();
-                NavMeshAgent navMeshAgent = player.gameObject.AddComponent<NavMeshAgent>();
-                playerModel.Mover = new PlayerNavigation(configuration.MoveSpeed, configuration.AngularSpeed, player.transform,
-                    navMeshAgent);
-                playerModel.Weapon = player.GetComponent<BaseWeapon>();
-                playerModel.Weapon.Initialize(player.transform, player.View.PlayerAnimationController, player.View.AnimatorEventHandler);
-                if (player.isLocalPlayer)
-                {
-                    playerModel.Input = new UiInput(_camera);
-                    _virtualCamera.Follow = player.transform;
-                    _virtualCamera.LookAt = player.transform;
-                }
-                else
-                {
-                    playerModel.Input = new NetworkInput();
-                }
-                
-                Debug.Log("|PlayerSpawner| Create");
-                player.InitializeModels(unitModel, playerModel);
-                player.transform.SetParent(_rootObject);
+                Player player = _playerFactory.Create(playerView);
+                _viewToPlayer[playerView] = player;
+                Debug.Log("|Player spawner| Spawn");
+                Spawn?.Invoke(player);
             }
         }
 
         private void OnDeSpawn(GameObject obj)
         {
-            if (obj.TryGetComponent(out Player player))
+            if (obj.TryGetComponent(out PlayerView playerView))
             {
-                DeSpawn?.Invoke(player);
+                if (_viewToPlayer.ContainsKey(playerView))
+                {
+                    //add remove player
+                    Debug.Log("|Player spawner| Despawn");
+                    DeSpawn?.Invoke(_viewToPlayer[playerView]);
+                }
             }
         }
         
         public void Dispose()
         {
-            
+            //todo:
         }
     }
 }

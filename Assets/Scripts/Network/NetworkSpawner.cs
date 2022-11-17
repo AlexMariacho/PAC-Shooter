@@ -1,34 +1,55 @@
 using System;
-using System.Collections.Generic;
-using Mirror;
 using UnityEngine;
 
 namespace Network
 {
-    public class NetworkSpawner : InterestManagement
+    public class NetworkSpawner : MonoBehaviour
     {
+        //todo: Издержки использования Mirror network
+        public static NetworkSpawner Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    Debug.LogError("Instance not existing!");
+                    return null;
+                }
+
+                return _instance;
+            }
+            private set
+            {
+                if (_instance == null)
+                    _instance = value;
+                else
+                {
+                    if (_instance != value)
+                    {
+                        Debug.LogError("NetworkSpawner exist more 1!");
+                        Destroy(value.gameObject);
+                    }
+                }
+            }
+        }
+        private static NetworkSpawner _instance;
+        
         public event Action<GameObject> Spawn;
         public event Action<GameObject> DeSpawn;
-        
-        public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnectionToClient newObserver)
+
+        private void Awake()
         {
-            return true;
+            Instance = this;
         }
 
-        public override void OnRebuildObservers(NetworkIdentity identity, HashSet<NetworkConnectionToClient> newObservers)
+        public void RegisterSpawn(GameObject gameObject)
         {
+            Spawn?.Invoke(gameObject);
         }
 
-        public override void OnSpawned(NetworkIdentity identity)
+        public void RegisterDeSpawn(GameObject gameObject)
         {
-            Spawn?.Invoke(identity.gameObject);
-            Debug.Log($"|NetworkFactory| Create object");
-        }
-
-        public override void OnDestroyed(NetworkIdentity identity)
-        {
-            DeSpawn?.Invoke(identity.gameObject);
-            Debug.Log($"|NetworkFactory| Destroy object");
+            DeSpawn?.Invoke(gameObject);
         }
     }
 }
