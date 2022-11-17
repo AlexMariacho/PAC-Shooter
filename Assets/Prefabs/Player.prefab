@@ -374,6 +374,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2106585151094673546}
+  - component: {fileID: 1031166941249624564}
   - component: {fileID: 85870148452666392}
   - component: {fileID: 7597915765623833638}
   - component: {fileID: 433315900914927967}
@@ -410,6 +411,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1031166941249624564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2106585151094639786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98fc0f369194aa2a2ac6b0a7106b00e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  <View>k__BackingField: {fileID: 7597915765623833638}
 --- !u!95 &85870148452666392
 Animator:
   serializedVersion: 4
@@ -442,10 +459,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 332d593d39ee46b9acda3e465efc99ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0.1
-  <Model>k__BackingField: {fileID: 2106585151094673546}
   <PlayerAnimationController>k__BackingField: {fileID: 6966594644080210705}
   <AnimatorEventHandler>k__BackingField: {fileID: 934567557256792440}
   <HpBarView>k__BackingField: {fileID: 64991433241606948}

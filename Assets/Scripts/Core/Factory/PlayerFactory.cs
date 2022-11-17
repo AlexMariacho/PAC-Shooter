@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
 
-namespace Shooter.Core.Factory
+namespace Shooter.Core
 {
     public class PlayerFactory : PlaceholderFactory<Player>
     {
@@ -12,7 +12,7 @@ namespace Shooter.Core.Factory
         private PlayerConfiguration _configuration;
         private Camera _camera;
         private CinemachineVirtualCamera _virtualCamera;
-
+        
         [Inject]
         private void Construct(RootObjects root, PlayerConfiguration configuration, Camera camera, CinemachineVirtualCamera virtualCamera)
         {
@@ -22,32 +22,33 @@ namespace Shooter.Core.Factory
             _virtualCamera = virtualCamera;
         }
 
-        public Player Create(PlayerView view)
+        public Player Initialize(Player spawnedPlayer)
         {
             PlayerModel playerModel = new PlayerModel();
-            NavMeshAgent navMeshAgent = view.gameObject.AddComponent<NavMeshAgent>();
-            playerModel.Mover = new PlayerNavigation(_configuration.MoveSpeed, _configuration.AngularSpeed, view.transform,
+            NavMeshAgent navMeshAgent = spawnedPlayer.gameObject.AddComponent<NavMeshAgent>();
+            playerModel.Mover = new PlayerNavigation(_configuration.MoveSpeed, _configuration.AngularSpeed, spawnedPlayer.transform,
                 navMeshAgent);
-            playerModel.Weapon = view.GetComponent<BaseWeapon>();
-            playerModel.Weapon.Initialize(view.transform, view.PlayerAnimationController, view.AnimatorEventHandler);
-            if (view.isLocalPlayer)
+            playerModel.Weapon = spawnedPlayer.GetComponent<BaseWeapon>();
+            playerModel.Weapon.Initialize(
+                spawnedPlayer.transform, 
+                spawnedPlayer.View.PlayerAnimationController, 
+                spawnedPlayer.View.AnimatorEventHandler);
+            if (spawnedPlayer.isLocalPlayer)
             {
                 playerModel.Input = new UiInput(_camera);
-                _virtualCamera.Follow = view.transform;
-                _virtualCamera.LookAt = view.transform;
+                _virtualCamera.Follow = spawnedPlayer.transform;
+                _virtualCamera.LookAt = spawnedPlayer.transform;
             }
             else
             {
                 playerModel.Input = new NetworkInput();
             }
-
-            playerModel.View = view;
-            view.transform.SetParent(_root.Units);
             
-            Player player = new Player(_configuration, playerModel, new PlayerDestroyable(_configuration.Hp), view.transform);
+            spawnedPlayer.transform.SetParent(_root.Units);
+            spawnedPlayer.Initialize(_configuration, playerModel, new PlayerDestroyable(_configuration.Hp));
             Debug.Log("|PlayerFactory| Create");
 
-            return player;
+            return spawnedPlayer;
         }
     }
 }

@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Mirror;
 using UnityEngine;
+using UnityEngine.AI;
 using Zenject;
+using Random = UnityEngine.Random;
 
 namespace Shooter.Core
 {
@@ -15,21 +18,72 @@ namespace Shooter.Core
         public GameController(DiContainer container)
         {
             _playerSpawner = container.Resolve<PlayerSpawner>();
-        }
 
+            _playerSpawner.Spawn += OnSpawnNewPlayer;
+            _playerSpawner.DeSpawn += OnDeSpawnPlayer;
+        }
+        
         public async UniTask StartGame(CancellationToken cancellationToken)
         {
+            Debug.Log("|Game Controller| Start");
             await UniTask.WaitUntil(() => false, cancellationToken: cancellationToken);
         }
         
+        private void OnSpawnNewPlayer(Player player)
+        {
+            if (!_players.ContainsKey(player.DestroyableComponent))
+            {
+                _players[player.DestroyableComponent] = player;
+                player.DestroyableComponent.Death += OnDeathPlayer;
+                SetRandomPosition(player);
+            }
+        }
+
+        [Command]
+        private void SetRandomPosition(Player player)
+        {
+            float randomRadius = 5f;
+            Vector3 randomPosition = new Vector3(Random.Range(-randomRadius, randomRadius), 0,
+                Random.Range(-randomRadius, randomRadius));
+            NavMeshHit hit;
+            NavMesh.SamplePosition(randomPosition, out hit, 15, 1);
+            Vector3 finalPosition = hit.position;
+
+            player.transform.position = finalPosition;
+            player.Init();
+        }
+        
+        private void OnDeSpawnPlayer(Player player)
+        {
+            if (_players.ContainsKey(player.DestroyableComponent))
+            {
+                _players.Remove(player.DestroyableComponent);
+                player.DestroyableComponent.Death -= OnDeathPlayer;
+                player.Dispose();
+            }
+        }
+
+        private void OnDeathPlayer(IDestroyable destroyable)
+        {
+            RespawnPlayer(_players[destroyable]).Forget();
+        }
+
+        private async UniTask RespawnPlayer(Player player)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(3));
+            SetRandomPosition(player);
+        }
+
         public void Dispose()
         {
-            foreach (var playersValue in _players.Values)
+            foreach (var player in _players.Values)
             {
-                playersValue.Dispose();
+                player.DestroyableComponent.Death -= OnDeathPlayer;
+                player.Dispose();
             }
-            _playerSpawner.Dispose();
-            Debug.Log("Game manager DISPOSE");
+            _playerSpawner.Spawn -= OnSpawnNewPlayer;
+            _playerSpawner.DeSpawn -= OnDeSpawnPlayer;
+            Debug.Log("|Game Controller| Stop and dispose");
         }
     }
 }

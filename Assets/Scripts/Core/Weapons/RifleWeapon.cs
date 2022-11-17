@@ -28,18 +28,18 @@ namespace Shooter.Core
         {
             _target = target;
             
-            if (Vector3.Distance(_selfTransform.position, target.Transform.position) > Configuration.Distance)
+            if (Vector3.Distance(_selfTransform.position, target.transform.position) > Configuration.Distance)
             {
                 return;
             }
             
-            _selfTransform.LookAt(target.Transform.position);
+            _selfTransform.LookAt(target.transform.position);
         }
         
         private void OnTakeDamage()
         {
             _target.DestroyableComponent.TakeDamage(Configuration.Damage);
-            StartCoroutine(ShowFireLine(_target.Transform.position));
+            StartCoroutine(ShowFireLine(_target.transform.position));
         }
 
         private IEnumerator ShowFireLine(Vector3 targetPosition)

@@ -27,9 +27,9 @@ namespace Shooter.Core
         
             if (Physics.Raycast(ray, out hit)) 
             {
-                if (hit.transform.TryGetComponent(out BaseUnit unit))
+                if (hit.transform.TryGetComponent(out BaseUnit baseUnit))
                 {
-                    Attack?.Invoke(unit);
+                    Attack?.Invoke(baseUnit);
                     return;
                 }
 
@@ -38,11 +38,6 @@ namespace Shooter.Core
                     Move?.Invoke(hit.point);
                 }
             }
-        }
-
-        private void SendMove(Vector3 move)
-        {
-            
         }
 
         public void Dispose()

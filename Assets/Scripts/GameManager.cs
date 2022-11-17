@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using Network;
 using Shooter.Core;
 using Shooter.Ui;
 using Shooter.Ui.Menu.Controllers;

@@ -4,7 +4,7 @@ namespace Shooter.Core
 {
     public sealed class PlayerDestroyable : IDestroyable
     {
-        public event Action Death;
+        public event Action<IDestroyable> Death;
         public event Action<int> ChangeHp;
         public int Hp { get; private set; }
         public int MaxHp { get; private set; }
@@ -23,8 +23,14 @@ namespace Shooter.Core
             if (Hp <= 0)
             {
                 Hp = 0;
-                Death?.Invoke();
+                Death?.Invoke(this);
             }
+        }
+
+        public void Reset()
+        {
+            Hp = MaxHp;
+            ChangeHp?.Invoke(Hp);
         }
     }
 }

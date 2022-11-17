@@ -2,14 +2,12 @@
 using Core;
 using Network;
 using Shooter.Core;
-using Shooter.Core.Factory;
 using UnityEngine;
 using Zenject;
-using Player = Shooter.Core.Player;
 
 namespace Shooter
 {
-    public class CompositeRoot : MonoInstaller
+    public class GameInstaller : MonoInstaller
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private RootObjects _rootObjects;
@@ -27,12 +25,7 @@ namespace Shooter
             Container.BindFactory<Player, PlayerFactory>().AsSingle();
             
             Container.Bind<PlayerSpawner>().AsSingle().NonLazy();
-            Container.Bind<Player>().AsTransient();
 
-  
-            
-
-            
         }
 
     }

@@ -15,8 +15,8 @@ namespace Shooter.Core
     [Serializable]
     public class WeaponConfiguration
     {
-        public float FireRate;
-        public int Damage;
-        public float Distance;
+        public float FireRate = 1;
+        public int Damage = 1;
+        public float Distance = 5;
     }
 }

@@ -1,26 +1,17 @@
 using System;
-using System.Collections.Generic;
-using Cinemachine;
-using Cysharp.Threading.Tasks;
 using Network;
-using Network.Extensions;
-using Shooter.Core.Factory;
 using UnityEngine;
-using UnityEngine.AI;
 using Zenject;
-using Zenject.SpaceFighter;
 
 namespace Shooter.Core
 {
-    public sealed class PlayerSpawner : IDisposable
+    public sealed class PlayerSpawner
     {
         public event Action<Player> Spawn;
         public event Action<Player> DeSpawn;
 
         private NetworkSpawner _networkSpawner;
         private PlayerFactory _playerFactory;
-
-        private Dictionary<PlayerView, Player> _viewToPlayer = new Dictionary<PlayerView, Player>();
 
         [Inject]
         public void Construct(NetworkSpawner networkServer, PlayerFactory factory)
@@ -32,12 +23,11 @@ namespace Shooter.Core
             _networkSpawner.DeSpawn += OnDeSpawn;
         }
 
-        private async void OnSpawn(GameObject gameObject)
+        private void OnSpawn(GameObject gameObject)
         {
-            if (gameObject.TryGetComponent(out PlayerView playerView))
+            if (gameObject.TryGetComponent(out Player spawnedPlayer))
             {
-                Player player = _playerFactory.Create(playerView);
-                _viewToPlayer[playerView] = player;
+                Player player = _playerFactory.Initialize(spawnedPlayer);
                 Debug.Log("|Player spawner| Spawn");
                 Spawn?.Invoke(player);
             }
@@ -45,20 +35,12 @@ namespace Shooter.Core
 
         private void OnDeSpawn(GameObject obj)
         {
-            if (obj.TryGetComponent(out PlayerView playerView))
+            if (obj.TryGetComponent(out Player deSpawnPlayer))
             {
-                if (_viewToPlayer.ContainsKey(playerView))
-                {
-                    //add remove player
-                    Debug.Log("|Player spawner| Despawn");
-                    DeSpawn?.Invoke(_viewToPlayer[playerView]);
-                }
+                Debug.Log("|Player spawner| Despawn");
+                DeSpawn?.Invoke(deSpawnPlayer);
             }
         }
-        
-        public void Dispose()
-        {
-            //todo:
-        }
+
     }
 }

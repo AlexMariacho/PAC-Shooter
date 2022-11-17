@@ -14,10 +14,21 @@ namespace Shooter.Core
         private static readonly int IsAttack = Animator.StringToHash("IsAttack");
         private static readonly int IsDeath = Animator.StringToHash("IsDeath");
         
+        private static readonly int IdleState = Animator.StringToHash("Idle");
+        
         public void Initialize(Player player)
         {
             _player = player;
             _player.ChangeState += OnChangePlayerState;
+        }
+
+        public void Reset()
+        {
+            _animator.SetBool(IsMove, false);
+            _animator.SetBool(IsAttack, false);
+            _animator.SetBool(IsDeath, false);
+            
+            _animator.Play(IdleState);
         }
 
         public void SetFireRate(float fireRate)
