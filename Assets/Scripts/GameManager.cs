@@ -40,6 +40,15 @@ namespace Shooter
             _gameHud.BackToMenu += OnDisconnect;
         }
 
+        private void OnDisable()
+        {
+            _startMenu.HostGame -= OnHostGame;
+            _startMenu.JoinGame -= OnShowJoinGame;
+            _joinMenu.Cancel -= OnJoinCancel;
+            _joinMenu.Join -= OnJoinGame;
+            _gameHud.BackToMenu -= OnDisconnect;
+        }
+
         private void OnHostGame()
         {
             StartGame();
@@ -65,15 +74,6 @@ namespace Shooter
         private void OnDisconnect()
         {
             _startMenu.Activate();
-        }
-
-        private void OnDisable()
-        {
-            _startMenu.HostGame -= OnHostGame;
-            _startMenu.JoinGame -= OnShowJoinGame;
-            _joinMenu.Cancel -= OnJoinCancel;
-            _joinMenu.Join -= OnJoinGame;
-            _gameHud.BackToMenu -= OnDisconnect;
         }
 
         public void Start()

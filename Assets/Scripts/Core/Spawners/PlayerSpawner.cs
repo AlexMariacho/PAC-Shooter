@@ -38,7 +38,6 @@ namespace Shooter.Core
             if (gameObject.TryGetComponent(out Player spawnedPlayer))
             {
                 Player player = Initialize(spawnedPlayer);
-                Debug.Log("|Player spawner| Spawn");
                 Spawn?.Invoke(player);
             }
         }
@@ -47,7 +46,6 @@ namespace Shooter.Core
         {
             if (obj.TryGetComponent(out Player deSpawnPlayer))
             {
-                Debug.Log("|Player spawner| Despawn");
                 DeSpawn?.Invoke(deSpawnPlayer);
             }
         }

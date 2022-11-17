@@ -5,7 +5,6 @@ using Cysharp.Threading.Tasks;
 using Mirror;
 using UnityEngine;
 using UnityEngine.AI;
-using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Shooter.Core
@@ -49,8 +48,11 @@ namespace Shooter.Core
             NavMesh.SamplePosition(randomPosition, out hit, 15, 1);
             Vector3 finalPosition = hit.position;
 
-            player.transform.position = finalPosition;
-            player.Reset();
+            if (player != null)
+            {
+                player.transform.position = finalPosition;
+                player.Reset();
+            }
         }
         
         private void OnDeSpawnPlayer(Player player)
