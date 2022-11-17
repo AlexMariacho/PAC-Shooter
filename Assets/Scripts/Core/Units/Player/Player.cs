@@ -21,12 +21,14 @@ namespace Shooter.Core
         private BaseUnit _targetAttack;
         private IEnumerator _attackCoroutine;
 
-        public Player(PlayerConfiguration configuration, UnitModel model, PlayerModel playerModel)
+        public Player(PlayerConfiguration configuration, PlayerModel playerModel, IDestroyable destroyableComponent, Transform transform)
         {
             Configuration = configuration;
-            Model = model;
             PlayerModel = playerModel;
-            Model.Destroyable.Death += OnDeath;
+            DestroyableComponent = destroyableComponent;
+            Transform = transform;
+
+            DestroyableComponent.Death += OnDeath;
             View.Initialize(this);
 
             PlayerModel.Input.Attack += OnAttack;
@@ -38,8 +40,8 @@ namespace Shooter.Core
         public override void Reset()
         {
             _targetAttack = null;
-            int maxHp = Model.Destroyable.MaxHp;
-            Model.Destroyable = new PlayerDestroyable(maxHp);
+            int maxHp = DestroyableComponent.MaxHp;
+            DestroyableComponent = new PlayerDestroyable(maxHp);
             View.Initialize(this);
             
             //SetState(PlayerState.Idle);
@@ -48,7 +50,7 @@ namespace Shooter.Core
         private void OnAttack(BaseUnit targetView)
         {
             if (targetView != this &&
-                Vector3.Distance(Model.Transform.position, targetView.Model.Transform.position) < PlayerModel.Weapon.Configuration.Distance)
+                Vector3.Distance(Transform.position, targetView.Transform.position) < PlayerModel.Weapon.Configuration.Distance)
             {
                 _targetAttack = targetView;
                 //SetState(PlayerState.Attack);
@@ -125,7 +127,7 @@ namespace Shooter.Core
         {
             PlayerModel.Input.Attack -= OnAttack;
             PlayerModel.Input.Move -= OnMove;
-            Model.Destroyable.Death -= OnDeath;
+            DestroyableComponent.Death -= OnDeath;
         }
     }
     

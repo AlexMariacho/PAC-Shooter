@@ -13,7 +13,7 @@ namespace Shooter.Core
         public void Initialize(Player player)
         {
             PlayerAnimationController.Initialize(player);
-            HpBarView.Initialize(player.Model.Destroyable);
+            HpBarView.Initialize(player.DestroyableComponent);
         }
         
         public override void OnStartClient()

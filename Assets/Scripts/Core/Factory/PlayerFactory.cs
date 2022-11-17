@@ -24,10 +24,6 @@ namespace Shooter.Core.Factory
 
         public Player Create(PlayerView view)
         {
-            UnitModel unitModel = new UnitModel();
-            unitModel.Destroyable = new PlayerDestroyable(_configuration.Hp);
-            unitModel.Transform = view.transform;
-            
             PlayerModel playerModel = new PlayerModel();
             NavMeshAgent navMeshAgent = view.gameObject.AddComponent<NavMeshAgent>();
             playerModel.Mover = new PlayerNavigation(_configuration.MoveSpeed, _configuration.AngularSpeed, view.transform,
@@ -48,7 +44,7 @@ namespace Shooter.Core.Factory
             playerModel.View = view;
             view.transform.SetParent(_root.Units);
             
-            Player player = new Player(_configuration, unitModel, playerModel);
+            Player player = new Player(_configuration, playerModel, new PlayerDestroyable(_configuration.Hp), view.transform);
             Debug.Log("|PlayerFactory| Create");
 
             return player;
