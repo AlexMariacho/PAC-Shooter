@@ -803,6 +803,50 @@ MonoBehaviour:
   _root: {fileID: 1711522803}
   _exitButton: {fileID: 780947819}
   _addressLabel: {fileID: 1555229421}
+--- !u!1 &468169557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 468169558}
+  - component: {fileID: 468169559}
+  m_Layer: 0
+  m_Name: NetworkSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &468169558
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468169557}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1994976027}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &468169559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468169557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d579259302478399f4e29a498d0e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &492874158
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,8 +2895,7 @@ MonoBehaviour:
   _rootObjects:
     Units: {fileID: 735465744}
     Ui: {fileID: 0}
-  _playerPrefab: {fileID: 7775295038857682841, guid: 0bb7026eb0b8da74387be710b322379c, type: 3}
-  _networkSpawner: {fileID: 2089726871}
+  _networkSpawner: {fileID: 468169559}
   _virtualCamera: {fileID: 942576139}
 --- !u!1 &963194225
 GameObject:
@@ -5799,6 +5842,7 @@ Transform:
   - {fileID: 15310404}
   - {fileID: 955320376}
   - {fileID: 2089726866}
+  - {fileID: 468169558}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6093,7 +6137,6 @@ GameObject:
   - component: {fileID: 2089726870}
   - component: {fileID: 2089726868}
   - component: {fileID: 2089726867}
-  - component: {fileID: 2089726871}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -6187,15 +6230,3 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs: []
   timeInterpolationGui: 0
---- !u!114 &2089726871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2089726862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3d579259302478399f4e29a498d0e03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

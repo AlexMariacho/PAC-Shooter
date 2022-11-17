@@ -12,23 +12,21 @@ namespace Shooter
     public class GameManager : MonoBehaviour
     {
         private UiContext _uiContext;
-        private PlayerSpawner _playerSpawner;
-        private NetworkSpawner _networkSpawner;
+        private DiContainer _container;
         
         private StartMenuController _startMenu;
 
         [Inject]
-        private void Construct(UiContext uiContext, PlayerSpawner playerSpawner, NetworkSpawner networkSpawner)
+        private void Construct(UiContext uiContext, DiContainer container)
         {
             _uiContext = uiContext;
-            _playerSpawner = playerSpawner;
-            _networkSpawner = networkSpawner;
+            _container = container;
         }
 
         public async void Start()
         {
             var ctl = new CancellationTokenSource();
-            using (GameController controller = new GameController(_playerSpawner))
+            using (GameController controller = new GameController(_container))
             {
                 try
                 {

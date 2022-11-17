@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace Shooter.Core
 {
@@ -11,9 +12,9 @@ namespace Shooter.Core
         private PlayerSpawner _playerSpawner;
         private Dictionary<IDestroyable, Player> _players = new Dictionary<IDestroyable, Player>();
 
-        public GameController(PlayerSpawner playerSpawner)
+        public GameController(DiContainer container)
         {
-            _playerSpawner = playerSpawner;
+            _playerSpawner = container.Resolve<PlayerSpawner>();
         }
 
         public async UniTask StartGame(CancellationToken cancellationToken)

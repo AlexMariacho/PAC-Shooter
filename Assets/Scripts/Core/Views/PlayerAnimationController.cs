@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Core
 {
-    [RequireComponent(typeof(Player)),
-    RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(Animator))]
     public class PlayerAnimationController : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
