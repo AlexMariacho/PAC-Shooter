@@ -50,7 +50,7 @@ namespace Shooter.Core
             Vector3 finalPosition = hit.position;
 
             player.transform.position = finalPosition;
-            player.Init();
+            player.Reset();
         }
         
         private void OnDeSpawnPlayer(Player player)

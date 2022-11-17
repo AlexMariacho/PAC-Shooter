@@ -24,8 +24,7 @@ namespace Shooter
             Container.Bind<PlayerConfiguration>().FromInstance(_playerConfiguration).NonLazy();
             Container.Bind<RootObjects>().FromInstance(_rootObjects).NonLazy();
             Container.Bind<NetworkSpawner>().FromInstance(_networkSpawner).AsSingle();
-            Container.BindFactory<Player, PlayerFactory>().AsSingle();
-            
+
             Container.Bind<PlayerSpawner>().AsSingle().NonLazy();
             Container.Bind<NetworkManager>().FromInstance(_networkManager).AsSingle().NonLazy();
         }

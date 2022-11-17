@@ -31,7 +31,7 @@ namespace Shooter.Core
             DestroyableComponent = destroyableComponent;
         }
 
-        public override void Init()
+        public override void Reset()
         {
             _targetAttack = null;
             View.PlayerAnimationController.Reset();
