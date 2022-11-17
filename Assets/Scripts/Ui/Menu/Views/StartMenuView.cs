@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Shooter.Ui
 {
-    public class StartMenuView : DialogView
+    public class StartMenuView : SimpleView
     {
         [SerializeField] private Button _createButton;
         [SerializeField] private Button _joinButton;

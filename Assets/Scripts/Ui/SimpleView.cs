@@ -5,7 +5,7 @@ namespace Shooter.Ui
     public class SimpleView : MonoBehaviour
     {
         [SerializeField] private GameObject _root;
-        public void SetActive(bool active)
+        protected void SetActive(bool active)
         {
             _root.SetActive(active);
         }
@@ -16,6 +16,18 @@ namespace Shooter.Ui
 
         protected virtual void Dispose()
         {
+        }
+        
+        public virtual void Show()
+        {
+            SetActive(true);
+            Init();
+        }
+
+        public virtual void Hide()
+        {
+            Dispose();
+            SetActive(false);
         }
     }
 }

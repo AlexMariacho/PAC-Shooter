@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace Shooter.Ui
 {
     public delegate void MessageClickHandler(MessageDialogView sender);
-    public class MessageDialogView : DialogView
+    public class MessageDialogView : SimpleView
     {
         [SerializeField] private TMP_Text _header;
         [SerializeField] private TMP_Text _text;

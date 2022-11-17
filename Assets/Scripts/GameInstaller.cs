@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Core;
+using Mirror;
 using Network;
 using Shooter.Core;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Shooter
         [SerializeField] private NetworkSpawner _networkSpawner;
         [SerializeField] private CinemachineVirtualCamera _virtualCamera;
         [SerializeField] private PlayerConfiguration _playerConfiguration;
+        [SerializeField] private NetworkManager _networkManager;
         
         public override void InstallBindings()
         {
@@ -25,7 +27,7 @@ namespace Shooter
             Container.BindFactory<Player, PlayerFactory>().AsSingle();
             
             Container.Bind<PlayerSpawner>().AsSingle().NonLazy();
-
+            Container.Bind<NetworkManager>().FromInstance(_networkManager).AsSingle().NonLazy();
         }
 
     }

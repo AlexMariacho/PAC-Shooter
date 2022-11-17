@@ -15,9 +15,9 @@ namespace Shooter.Core
         private PlayerSpawner _playerSpawner;
         private Dictionary<IDestroyable, Player> _players = new Dictionary<IDestroyable, Player>();
 
-        public GameController(DiContainer container)
+        public GameController(PlayerSpawner spawner)
         {
-            _playerSpawner = container.Resolve<PlayerSpawner>();
+            _playerSpawner = spawner;
 
             _playerSpawner.Spawn += OnSpawnNewPlayer;
             _playerSpawner.DeSpawn += OnDeSpawnPlayer;
@@ -25,7 +25,7 @@ namespace Shooter.Core
         
         public async UniTask StartGame(CancellationToken cancellationToken)
         {
-            Debug.Log("|Game Controller| Start");
+            //some game rules
             await UniTask.WaitUntil(() => false, cancellationToken: cancellationToken);
         }
         
@@ -76,14 +76,16 @@ namespace Shooter.Core
 
         public void Dispose()
         {
+            _playerSpawner.Spawn -= OnSpawnNewPlayer;
+            _playerSpawner.DeSpawn -= OnDeSpawnPlayer;
+            
             foreach (var player in _players.Values)
             {
                 player.DestroyableComponent.Death -= OnDeathPlayer;
                 player.Dispose();
             }
-            _playerSpawner.Spawn -= OnSpawnNewPlayer;
-            _playerSpawner.DeSpawn -= OnDeSpawnPlayer;
-            Debug.Log("|Game Controller| Stop and dispose");
+            
+            _players.Clear();
         }
     }
 }

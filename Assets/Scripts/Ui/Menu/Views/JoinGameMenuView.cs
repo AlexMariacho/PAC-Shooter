@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Shooter.Ui
 {
     public delegate void IpJoinHandler(string ipAddress);
-    public class JoinGameMenuView : DialogView
+    public class JoinGameMenuView : SimpleView
     {
         [SerializeField] private TMP_InputField _input;
         [SerializeField] private Button _joinButton;

@@ -158,7 +158,6 @@ namespace Shooter.Core
         [ClientRpc]
         private void ReceiveMoveCommand(Vector3 point)
         {
-            Debug.Log("ReceiveMove command");
             _targetMovePosition = point;
             SetState(PlayerState.Move);
         }

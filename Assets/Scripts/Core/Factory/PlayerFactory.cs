@@ -46,7 +46,6 @@ namespace Shooter.Core
             
             spawnedPlayer.transform.SetParent(_root.Units);
             spawnedPlayer.Initialize(_configuration, playerModel, new PlayerDestroyable(_configuration.Hp));
-            Debug.Log("|PlayerFactory| Create");
 
             return spawnedPlayer;
         }
