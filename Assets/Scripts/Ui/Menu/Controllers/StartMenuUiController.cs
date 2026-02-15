@@ -3,7 +3,7 @@ using Mirror;
 
 namespace Shooter.Ui.Menu.Controllers
 {
-    public class StartMenuController : IController
+    public class StartMenuUiController : IUiController
     {
         public event Action HostGame;
         public event Action JoinGame;
@@ -11,7 +11,7 @@ namespace Shooter.Ui.Menu.Controllers
         private StartMenuView _view;
         private NetworkManager _networkManager;
         
-        public StartMenuController(StartMenuView view, NetworkManager networkManager)
+        public StartMenuUiController(StartMenuView view, NetworkManager networkManager)
         {
             _view = view;
             _networkManager = networkManager;

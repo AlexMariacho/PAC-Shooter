@@ -1,6 +1,6 @@
 namespace Shooter.Ui
 {
-    public interface IController
+    public interface IUiController
     {
         void Activate();
         void Deactivate();

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Shooter.Ui
 {
-    public class GameHudView : SimpleView
+    public class GameHudView : BaseView
     {
         [SerializeField] private Button _exitButton;
         [SerializeField] private TMP_Text _addressLabel;

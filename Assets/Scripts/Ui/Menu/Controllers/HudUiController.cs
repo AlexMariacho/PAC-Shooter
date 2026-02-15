@@ -3,13 +3,13 @@ using Mirror;
 
 namespace Shooter.Ui.Menu.Controllers
 {
-    public class HudController : IController
+    public class HudUiController : IUiController
     {
         public event Action BackToMenu;
         private GameHudView _view;
         private NetworkManager _networkManager;
 
-        public HudController(GameHudView view, NetworkManager networkManager)
+        public HudUiController(GameHudView view, NetworkManager networkManager)
         {
             _view = view;
             _networkManager = networkManager;
