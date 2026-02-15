@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Shooter.Core;
 using Shooter.Ui;
@@ -14,97 +15,125 @@ namespace Shooter
         private UiContext _uiContext;
         private PlayerSpawner _playerSpawner;
         private NetworkManager _networkManager;
-        
-        private StartMenuController _startMenu;
-        private JoinMenuController _joinMenu;
-        private HudController _gameHud;
+
+        private StartMenuUiController _startMenuUi;
+        private JoinMenuUiController _joinMenuUi;
+        private HudUiController _gameHudUi;
+
+        private CancellationToken _destroyToken;
 
         [Inject]
-        private void Construct(UiContext uiContext, PlayerSpawner spawner, NetworkManager networkManager)
+        private void Construct(
+            UiContext uiContext,
+            PlayerSpawner spawner,
+            NetworkManager networkManager)
         {
             _uiContext = uiContext;
             _playerSpawner = spawner;
             _networkManager = networkManager;
 
-            _startMenu = new StartMenuController(_uiContext.StartMenuView, _networkManager);
-            _joinMenu = new JoinMenuController(_uiContext.JoinGameMenuView, _networkManager);
-            _gameHud = new HudController(_uiContext.GameHudView, _networkManager);
+            _startMenuUi = new StartMenuUiController(_uiContext.StartMenuView, _networkManager);
+            _joinMenuUi = new JoinMenuUiController(_uiContext.JoinGameMenuView, _networkManager);
+            _gameHudUi = new HudUiController(_uiContext.GameHudView, _networkManager);
+        }
+
+        private void Awake()
+        {
+            _destroyToken = this.GetCancellationTokenOnDestroy();
         }
 
         private void OnEnable()
         {
-            _startMenu.HostGame += OnHostGame;
-            _startMenu.JoinGame += OnShowJoinGame;
-            _joinMenu.Cancel += OnJoinCancel;
-            _joinMenu.Join += OnJoinGame;
-            _gameHud.BackToMenu += OnDisconnect;
+            _startMenuUi.HostGame += OnHostGame;
+            _startMenuUi.JoinGame += OnShowJoinGame;
+            _joinMenuUi.Cancel += OnJoinCancel;
+            _joinMenuUi.Join += OnJoinGame;
+            _gameHudUi.BackToMenu += OnDisconnect;
         }
 
         private void OnDisable()
         {
-            _startMenu.HostGame -= OnHostGame;
-            _startMenu.JoinGame -= OnShowJoinGame;
-            _joinMenu.Cancel -= OnJoinCancel;
-            _joinMenu.Join -= OnJoinGame;
-            _gameHud.BackToMenu -= OnDisconnect;
+            _startMenuUi.HostGame -= OnHostGame;
+            _startMenuUi.JoinGame -= OnShowJoinGame;
+            _joinMenuUi.Cancel -= OnJoinCancel;
+            _joinMenuUi.Join -= OnJoinGame;
+            _gameHudUi.BackToMenu -= OnDisconnect;
+        }
+
+        private void Start()
+        {
+            _startMenuUi.Activate();
         }
 
         private void OnHostGame()
         {
-            StartGame();
-            _gameHud.Activate();
+            RunGameLoopAsync().Forget();
+            _gameHudUi.Activate();
         }
 
         private void OnShowJoinGame()
         {
-            _joinMenu.Activate();
+            _joinMenuUi.Activate();
         }
 
         private void OnJoinGame()
         {
-            StartGame();
-            _gameHud.Activate();
+            RunGameLoopAsync().Forget();
+            _gameHudUi.Activate();
         }
 
         private void OnJoinCancel()
         {
-            _startMenu.Activate();
+            _startMenuUi.Activate();
         }
 
         private void OnDisconnect()
         {
-            _startMenu.Activate();
+            _startMenuUi.Activate();
         }
 
-        public void Start()
-        {
-            _startMenu.Activate();
-        }
 
-        private async void StartGame()
+
+        private async UniTaskVoid RunGameLoopAsync()
         {
-            using (GameController controller = new GameController(_playerSpawner))
+            using var gameCts = new CancellationTokenSource();
+
+            using var linkedCts =
+                CancellationTokenSource.CreateLinkedTokenSource(gameCts.Token, _destroyToken);
+
+            void OnBackToMenu()
             {
-                var clt = new CancellationTokenSource();
-                _gameHud.BackToMenu += () => clt.Cancel();
-                
-                try
+                if (!gameCts.IsCancellationRequested)
                 {
-                    await controller.StartGame(clt.Token);
-                }
-                catch (Exception e)
-                {
-                    if (!(e is OperationCanceledException))
-                    {
-                        Console.WriteLine(e);
-                        throw;
-                    }
-                }
-                finally
-                {
-                    Debug.Log("End Game");
+                    gameCts.Cancel();
                 }
             }
+
+            _gameHudUi.BackToMenu += OnBackToMenu;
+
+            try
+            {
+                await StartGameInternalAsync(linkedCts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.Log("Game canceled.");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Unhandled exception in game loop: {ex}");
+            }
+            finally
+            {
+                _gameHudUi.BackToMenu -= OnBackToMenu;
+                Debug.Log("End Game");
+            }
+        }
+        
+        private async UniTask StartGameInternalAsync(CancellationToken token)
+        {
+            using var controller = new GameController(_playerSpawner);
+            await controller.StartGame(token);
         }
 
     }
